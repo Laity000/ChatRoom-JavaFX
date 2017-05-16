@@ -7,9 +7,9 @@ This is a client/server chatroom gui app by JavaFX, supporting personal and glob
 
 ## 我是图片的搬运工：
 
- ![][/screenshots/loginUI.png "LoginUI"]
+![](/screenshots/loginUI.png "LoginUI")
 
-![][/screenshots/chatUI.png "ChatUI"]
+![](/screenshots/chatUI.png "ChatUI")
 
 
 
