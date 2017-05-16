@@ -39,7 +39,7 @@
                      <graphic>
                         <ImageView fx:id="microphoneImageView" fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../images/microphone.png" />
+                              <Image url="@../images/expression.png" />
                            </image>
                         </ImageView>
                      </graphic></Button>
