@@ -1,0 +1,11 @@
+eclipse.preferences.version=1
+encoding//src/main/java=UTF-8
+encoding//src/main/java/com/chatroom/bubble/Bubble.java=UTF-8
+encoding//src/main/java/com/chatroom/bubble/BubbleSpec.java=UTF-8
+encoding//src/main/java/com/chatroom/bubble/BubbledLabel.java=UTF-8
+encoding//src/main/java/com/chatroom/messages/Message.java=UTF-8
+encoding//src/main/java/com/chatroom/messages/MessageType.java=UTF-8
+encoding//src/main/java/com/chatroom/messages/UserInfo.java=UTF-8
+encoding//src/main/java/com/chatroom/messages/Utils.java=UTF-8
+encoding//src/main/resources=UTF-8
+encoding/<project>=UTF-8
