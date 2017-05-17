@@ -5,7 +5,14 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 
-
+/**
+ *
+ * @Title: Main.java
+ * @Description: TODO 程序入口
+ * @author ZhangJing   https://github.com/Laity000/ChatRoom-JavaFX
+ * @date 2017年5月17日 上午11:19:59
+ *
+ */
 public class Main extends Application {
 
     public final static String LoginUIID = "LoginUI";

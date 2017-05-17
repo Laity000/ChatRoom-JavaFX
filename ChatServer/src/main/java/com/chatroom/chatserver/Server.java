@@ -19,7 +19,14 @@ import com.chatroom.messages.MessageType;
 import com.chatroom.messages.UserInfo;
 import com.chatroom.messages.Utils;
 
-
+/**
+ *
+ * @Title: Server.java
+ * @Description: TODO 后端服务器程序
+ * @author ZhangJing   https://github.com/Laity000/ChatRoom-JavaFX
+ * @date 2017年5月17日 上午11:21:38
+ *
+ */
 public class Server {
 	private static final Logger logger = LoggerFactory.getLogger(Server.class);
 

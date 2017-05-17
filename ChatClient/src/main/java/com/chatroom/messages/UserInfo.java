@@ -1,5 +1,6 @@
 package com.chatroom.messages;
 
+//用户个人信息定义
 public class UserInfo {
 
 	public UserInfo() {

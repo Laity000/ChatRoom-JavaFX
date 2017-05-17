@@ -1,7 +1,6 @@
 package com.chatroom.client;
 import java.io.IOException;
 import java.net.URL;
-import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.LinkedList;
@@ -39,7 +38,14 @@ import javafx.scene.text.Text;
 import com.chatroom.messages.Message;
 import com.chatroom.messages.UserInfo;
 import com.chatroom.messages.Utils;
-
+/**
+ *
+ * @Title: ChatController.java
+ * @Description: TODO 聊天室主窗口控制器
+ * @author ZhangJing   https://github.com/Laity000/ChatRoom-JavaFX
+ * @date 2017年5月17日 上午11:17:35
+ *
+ */
 public class ChatController extends ControlledStage implements Initializable{
 
 	//ChatController对象

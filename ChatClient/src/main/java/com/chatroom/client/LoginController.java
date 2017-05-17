@@ -2,11 +2,8 @@ package com.chatroom.client;
 import java.net.URL;
 import java.util.Random;
 import java.util.ResourceBundle;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -18,6 +15,14 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.text.Text;
 
+/**
+ *
+ * @Title: LoginController.java
+ * @Description: TODO 登录窗口控制器
+ * @author ZhangJing   https://github.com/Laity000/ChatRoom-JavaFX
+ * @date 2017年5月17日 上午11:19:25
+ *
+ */
 public class LoginController extends ControlledStage implements  Initializable{
 	private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
 	//Stage管理器

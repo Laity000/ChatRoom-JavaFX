@@ -1,7 +1,14 @@
 package com.chatroom.messages;
 
 import java.util.LinkedList;
-
+/**
+ *
+ * @Title: Message.java
+ * @Description: TODO 封装通讯消息
+ * @author ZhangJing   https://github.com/Laity000/ChatRoom-JavaFX
+ * @date 2017年5月17日 上午11:20:26
+ *
+ */
 public class Message {
 	//消息类型
 	private MessageType type;

@@ -1,6 +1,5 @@
 package com.chatroom.client;
 
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -9,19 +8,22 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketAddress;
 import java.net.SocketTimeoutException;
-import java.util.ArrayList;
 import java.util.LinkedList;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import com.google.gson.Gson;
-
 import com.chatroom.messages.Message;
 import com.chatroom.messages.MessageType;
 import com.chatroom.messages.UserInfo;
 
-
+/**
+ *
+ * @Title: ClientThread.java
+ * @Description: TODO 通讯线程
+ * @author ZhangJing   https://github.com/Laity000/ChatRoom-JavaFX
+ * @date 2017年5月17日 上午11:18:37
+ *
+ */
 public class ClientThread implements Runnable
 {
 	private static final Logger logger = LoggerFactory.getLogger(ClientThread.class);
