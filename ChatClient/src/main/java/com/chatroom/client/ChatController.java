@@ -312,7 +312,15 @@ public class ChatController extends ControlledStage implements Initializable{
 			protected HBox call() throws Exception {
 				// TODO Auto-generated method stub
 				//寻找用户的头像名
-				Image image = new Image("images/" + userPic);
+				 String otherUserName = message.getFrom();
+				 String otherUserPic = null;
+				 for(UserInfo user : userInfoList){
+					 if(otherUserName.equals(user.getUsername())){
+						 otherUserPic = user.getUserpic();
+					 }
+				 }
+
+				Image image = new Image("images/" + otherUserPic);
                 ImageView profileImage = new ImageView(image);
                 profileImage.setFitHeight(32);
                 profileImage.setFitWidth(32);

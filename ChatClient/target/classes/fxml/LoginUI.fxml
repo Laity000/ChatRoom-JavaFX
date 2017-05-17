@@ -36,7 +36,7 @@
             <RowConstraints maxHeight="110.0" minHeight="9.0" prefHeight="11.0" />
          </rowConstraints>
          <children>
-            <Button id="customBtn" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#connectBtnAction" stylesheets="@../css/Login.css" text="Connect" GridPane.columnIndex="2" GridPane.rowIndex="6" />
+            <Button id="customBtn" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#connectBtnAction" stylesheets="@../css/LoginViewStyle.css" text="Connect" GridPane.columnIndex="2" GridPane.rowIndex="6" />
             <Label text="Hostname: " textAlignment="CENTER" textFill="#f89406" GridPane.rowIndex="5" />
             <TextField fx:id="hostnameTextfield" prefWidth="188.0" text="127.0.0.1" GridPane.columnIndex="1" GridPane.rowIndex="5" />
             <Label text="Port: " textFill="#f89406" GridPane.rowIndex="6" />
@@ -56,12 +56,12 @@
             </StackPane>
             <HBox prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="2">
                <children>
-                  <Button id="minimizedBtn" contentDisplay="GRAPHIC_ONLY" graphicTextGap="0.0" maxHeight="24.0" maxWidth="68.0" minWidth="45.0" mnemonicParsing="false" onAction="#minBtnAction" prefHeight="24.0" prefWidth="45.0" stylesheets="@../css/Login.css">
+                  <Button id="minimizedBtn" contentDisplay="GRAPHIC_ONLY" graphicTextGap="0.0" maxHeight="24.0" maxWidth="68.0" minWidth="45.0" mnemonicParsing="false" onAction="#minBtnAction" prefHeight="24.0" prefWidth="45.0" stylesheets="@../css/LoginViewStyle.css">
                      <cursor>
                         <Cursor fx:constant="HAND" />
                      </cursor>
                   </Button>
-                  <Button id="closeBtn" fx:id="closeButton" contentDisplay="GRAPHIC_ONLY" graphicTextGap="0.0" maxHeight="24.0" maxWidth="68.0" minWidth="45.0" mnemonicParsing="false" onAction="#closeBtnAction" prefHeight="24.0" prefWidth="45.0" stylesheets="@../css/Login.css">
+                  <Button id="closeBtn" fx:id="closeButton" contentDisplay="GRAPHIC_ONLY" graphicTextGap="0.0" maxHeight="24.0" maxWidth="68.0" minWidth="45.0" mnemonicParsing="false" onAction="#closeBtnAction" prefHeight="24.0" prefWidth="45.0" stylesheets="@../css/LoginViewStyle.css">
                      <cursor>
                         <Cursor fx:constant="HAND" />
                      </cursor></Button>
@@ -75,7 +75,7 @@
                   <Font size="10.0" />
                </font>
             </Label>
-            <Button id="customBtn" mnemonicParsing="false" onAction="#randomBtnAction" stylesheets="@../css/Login.css" text="Random" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+            <Button id="customBtn" mnemonicParsing="false" onAction="#randomBtnAction" stylesheets="@../css/LoginViewStyle.css" text="Random" GridPane.columnIndex="2" GridPane.rowIndex="3" />
             <Text id="actiontarget" fx:id="resultText" fill="RED" strokeType="OUTSIDE" strokeWidth="0.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
          </children>
       </GridPane>

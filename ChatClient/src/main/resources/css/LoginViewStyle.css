@@ -39,7 +39,7 @@
 
 #customBtn:pressed{
     -fx-opacity: 1;
-    -fx-padding: 5px 20px;
+    -fx-padding: 5px 12px;
     -fx-spacing: 10px;
     -fx-start-margin: 10px;
     -fx-background-color: linear-gradient(to bottom, #ffe49e 0%,#ffb700 3%,#ffad00 35%,#ff9000 97%,#e27f00 100%);
