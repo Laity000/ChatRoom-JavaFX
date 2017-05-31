@@ -35,9 +35,9 @@
                      <font>
                         <Font size="18.0" />
                      </font></Button>
-                  <Button fx:id="recordButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onMousePressed="#recordVoiceMessage">
+                  <Button fx:id="emojiSelectorButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#emojiSelectorBtnAction">
                      <graphic>
-                        <ImageView fx:id="microphoneImageView" fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../images/expression.png" />
                            </image>

@@ -4,20 +4,26 @@ import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.LinkedList;
+import java.util.Queue;
 import java.util.ResourceBundle;
 
 import com.chatroom.bubble.BubbleSpec;
-import com.chatroom.bubble.BubbledLabel;
+import com.chatroom.bubble.BubbledTextFlow;
+import com.chatroom.emojis.Emoji;
+import com.chatroom.emojis.EmojiHandler;
+import com.chatroom.emojis.EmojiDisplayer;
+
 import javafx.application.Platform;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
@@ -38,6 +44,7 @@ import javafx.scene.text.Text;
 import com.chatroom.messages.Message;
 import com.chatroom.messages.UserInfo;
 import com.chatroom.messages.Utils;
+import com.chatroom.stage.ControlledStage;
 /**
  *
  * @Title: ChatController.java
@@ -100,7 +107,12 @@ public class ChatController extends ControlledStage implements Initializable{
     	return instance;
     }
 
-    /**
+
+    public TextArea getMessageBoxTextArea() {
+		return messageBoxTextArea;
+	}
+
+	/**
      * 得到连接线程对象。理解：
      * ChatController类贯穿整个进程，不能通过ChatController————>ClientThread，
      * 把握不好时机容易得到空指针。
@@ -110,11 +122,12 @@ public class ChatController extends ControlledStage implements Initializable{
      */
     public void setClientThread(ClientThread clientThread) {
 		this.clientThread = clientThread;
-		userName = clientThread.getUserName();
-		userPic = clientThread.getUserPic();
-		//初始化Chat界面，更新如用户头像、用户名
-		init();
-
+		if (clientThread != null){
+			userName = clientThread.getUserName();
+			userPic = clientThread.getUserPic();
+			//初始化Chat界面，更新如用户头像、用户名
+			init();
+		}
 	}
 
 	@Override
@@ -122,17 +135,19 @@ public class ChatController extends ControlledStage implements Initializable{
 		// TODO Auto-generated method stub
 		/* Drag and Drop */
         borderPane.setOnMousePressed(event -> {
-            xOffset = myController.getStage(myStageUIID).getX() - event.getScreenX();
-            yOffset = myController.getStage(myStageUIID).getY() - event.getScreenY();
+            xOffset = getLocalStage().getX() - event.getScreenX();
+            yOffset = getLocalStage().getY() - event.getScreenY();
             borderPane.setCursor(Cursor.CLOSED_HAND);
         });
         borderPane.setOnMouseDragged(event -> {
-            myController.getStage(myStageUIID).setX(event.getScreenX() + xOffset);
-            myController.getStage(myStageUIID).setY(event.getScreenY() + yOffset);
+        	getLocalStage().setX(event.getScreenX() + xOffset);
+        	getLocalStage().setY(event.getScreenY() + yOffset);
         });
         borderPane.setOnMouseReleased(event -> {
             borderPane.setCursor(Cursor.DEFAULT);
         });
+        //设置图标
+        setIcon("images/icon_chatroom.png");
 	}
 
 	/**
@@ -140,22 +155,20 @@ public class ChatController extends ControlledStage implements Initializable{
 	 * @param event
 	 * @throws IOException
 	 */
-	@FXML public void sendBtnAction() throws IOException{
+	@FXML public void sendBtnAction() {
 		String content = messageBoxTextArea.getText();
 		if(!content.isEmpty()){
 			clientThread.sendMsg(userName, otherUserName, content);
 			messageBoxTextArea.clear();
 			addYourMessges(content);
 		}
-
-
 	}
 	/**
 	 * 设置发送快捷键
 	 * @param event
 	 * @throws IOException
 	 */
-	@FXML public void sendMethod(KeyEvent event) throws IOException {
+	@FXML public void sendMethod(KeyEvent event) {
         if (event.getCode() == KeyCode.ENTER) {
             sendBtnAction();
         }
@@ -165,7 +178,7 @@ public class ChatController extends ControlledStage implements Initializable{
 	 * 关闭界面
 	 * @throws IOException
 	 */
-	@FXML public void closeImgViewPressedAction() throws IOException {
+	@FXML public void closeImgViewPressedAction() {
 		//首先需要向服务器注销用户
 		clientThread.disconnect();
 		clientThread.destroy();
@@ -178,7 +191,7 @@ public class ChatController extends ControlledStage implements Initializable{
 	 * 注销用户
 	 * @throws IOException
 	 */
-	@FXML public void logoutImgViewPressedAction() throws IOException {
+	@FXML public void logoutImgViewPressedAction() {
 		//首先需要向服务器注销用户
 		clientThread.disconnect();
 		clientThread.destroy();
@@ -190,9 +203,25 @@ public class ChatController extends ControlledStage implements Initializable{
 		//myController.unloadStage(myStageUIID);
 
     }
-
-	@FXML public void recordVoiceMessage() throws IOException {}
-
+	/**
+	 * emoji选择器启动按钮事件
+	 * @param event
+	 */
+	@FXML public void emojiSelectorBtnAction(ActionEvent event) {
+		if(!getStage(Main.EmojiSelectorUIID).isShowing()){
+			//设置emoji选择器的位置
+			double prex = getLocalStage().getX();
+			double prey = getLocalStage().getY();
+			double preheight = getLocalStage().getHeight();
+			double prewidth = getLocalStage().getWidth();
+			setStagePos(Main.EmojiSelectorUIID, prex + prewidth/2, prey + preheight/2);
+			//打开
+			openStage(Main.EmojiSelectorUIID);
+		}else {
+			//关闭
+			closeStage(Main.EmojiSelectorUIID);
+		}
+	}
 
 	/**
 	 * 初始化Chat界面，更新如用户头像、用户名
@@ -200,7 +229,6 @@ public class ChatController extends ControlledStage implements Initializable{
 	private void init(){
 		userImageView.setImage(new Image("images/" + userPic));
 		usernameLabel.setText(userName);
-
 	}
 
 	/**
@@ -330,16 +358,15 @@ public class ChatController extends ControlledStage implements Initializable{
                 ImageView profileImage = new ImageView(image);
                 profileImage.setFitHeight(32);
                 profileImage.setFitWidth(32);
-                BubbledLabel otherBubbled = new BubbledLabel();
-                otherBubbled.setFont(Font.font("Arial", 15));//字体样式和大小
-                if(message.getTo().equals(Utils.ALL)){
-                	otherBubbled.setText(message.getFrom() + ": " + message.getContent());
-                	otherBubbled.setBackground(new Background(new BackgroundFill(Color.LIGHTGRAY,null, null)));
-                }else {
-                	otherBubbled.setText("[private message] " + message.getFrom() + ": " + message.getContent());
-                    otherBubbled.setBackground(new Background(new BackgroundFill(Color.LIGHTBLUE, null, null)));
 
+                String content = null;
+                if(message.getTo().equals(Utils.ALL)){
+                	content = message.getFrom() + ": " + message.getContent();
+                }else {
+                	content = "[private message] " + message.getFrom() + ": " + message.getContent();
 				}
+                BubbledTextFlow otherBubbled = new BubbledTextFlow(EmojiDisplayer.createEmojiAndTextNode(content));
+                otherBubbled.setBackground(new Background(new BackgroundFill(Color.LIGHTBLUE, null, null)));
 
                 HBox x = new HBox();
                 otherBubbled.setBubbleSpec(BubbleSpec.FACE_LEFT_CENTER);
@@ -366,9 +393,7 @@ public class ChatController extends ControlledStage implements Initializable{
             ImageView profileImage = new ImageView(image);
             profileImage.setFitHeight(32);
             profileImage.setFitWidth(32);
-            BubbledLabel yourBubbled = new BubbledLabel();
-            yourBubbled.setFont(Font.font("Arial", 15));//字体样式和大小
-            yourBubbled.setText(content);
+            BubbledTextFlow yourBubbled = new BubbledTextFlow(EmojiDisplayer.createEmojiAndTextNode(content));
             yourBubbled.setBackground(new Background(new BackgroundFill(Color.LIGHTGREEN,
                     null, null)));
             HBox x = new HBox();
@@ -387,10 +412,9 @@ public class ChatController extends ControlledStage implements Initializable{
 		Platform.runLater(() ->{
 			SimpleDateFormat df = new SimpleDateFormat("HH:mm:ss");//设置日期格式
 			String timer = df.format(new Date());// new Date()为获取当前系统时间
-			BubbledLabel noticeBubbled = new BubbledLabel();
-			noticeBubbled.setFont(Font.font("Arial", 15));//字体样式和大小
-			noticeBubbled.setTextFill(Color.web("#031c30"));
-			noticeBubbled.setText(timer +  ": " + notice);
+			String content = timer +  ": " + notice;
+			BubbledTextFlow noticeBubbled = new BubbledTextFlow(EmojiDisplayer.createEmojiAndTextNode(content));
+			//noticeBubbled.setTextFill(Color.web("#031c30"));
 			noticeBubbled.setBackground(new Background(new BackgroundFill(Color.WHITE,
                     null, null)));
             HBox x = new HBox();
@@ -399,9 +423,6 @@ public class ChatController extends ControlledStage implements Initializable{
             noticeBubbled.setBubbleSpec(BubbleSpec.FACE_TOP);
             x.getChildren().addAll(noticeBubbled);
             chatPaneListView.getItems().add(x);
-
 		});
-
 	}
-
 }

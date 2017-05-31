@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox alignment="TOP_RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.chatroom.client.EmojiSelectorController">
+   <children>
+      <HBox alignment="TOP_RIGHT">
+         <children>
+            <TextField fx:id="searchTextField" prefHeight="23.0" prefWidth="385.0" promptText="Search emoji" />
+            <ImageView fitHeight="23.0" fitWidth="23.0" onMousePressed="#closeImgViewPressedAction" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/close2.png" />
+               </image>
+            </ImageView>
+         </children>
+      </HBox>
+      <AnchorPane>
+         <children>
+            <ScrollPane fx:id="searchScrollPane">
+               <content>
+                  <FlowPane fx:id="searchFlowPane" prefHeight="200.0" prefWidth="400.0" />
+               </content>
+            </ScrollPane>
+            <ScrollPane fx:id="showScrollPane" layoutX="1.0" layoutY="1.0">
+               <content>
+                  <FlowPane fx:id="showFlowPane" prefHeight="200.0" prefWidth="400.0" />
+               </content>
+            </ScrollPane>
+         </children>
+      </AnchorPane>
+   </children>
+   <cursor>
+      <Cursor fx:constant="CLOSED_HAND" />
+   </cursor>
+</VBox>

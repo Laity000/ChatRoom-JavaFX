@@ -1,5 +1,7 @@
 package com.chatroom.client;
 
+import com.chatroom.stage.StageController;
+
 import javafx.application.Application;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -21,6 +23,8 @@ public class Main extends Application {
     public final static String ChatUIID = "ChatUI";
     public final static String ChatUIRes = "fxml/ChatUI.fxml";
 
+    public final static String EmojiSelectorUIID = "EmojiSelectorUI";
+    public final static String EmojiSelectorUIRes = "fxml/EmojiSelectorUI.fxml";
 
     private StageController stageController;
 
@@ -36,8 +40,9 @@ public class Main extends Application {
 	        //加载两个舞台，每个界面一个舞台
 	        //stageController.loadStage(LoginUIID, LoginUIRes);
 	        //stageController.loadStage(ChatUIID, ChatUIRes);
-	        stageController.loadStage(LoginUIID, LoginUIRes, StageStyle.UNDECORATED);
-	        stageController.loadStage(ChatUIID, ChatUIRes, StageStyle.UNDECORATED);
+	        stageController.loadStage(LoginUIID, LoginUIRes, false, StageStyle.UNDECORATED);
+	        stageController.loadStage(ChatUIID, ChatUIRes, false, StageStyle.UNDECORATED);
+	        stageController.loadStage(EmojiSelectorUIID, EmojiSelectorUIRes, true, StageStyle.UNDECORATED);
 
 	        //显示MainView舞台
 	        stageController.showStage(LoginUIID);

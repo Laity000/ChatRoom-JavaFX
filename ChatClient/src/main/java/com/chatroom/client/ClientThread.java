@@ -163,7 +163,7 @@ public class ClientThread implements Runnable
 	 * 将message转化为字符串后发送
 	 * @param message
 	 */
-	public void send(Message message) throws IOException{
+	public void send(Message message) {
 		//转化为gson的字符串
 		String messagesString = gson.toJson(message);
 		logger.debug("发送的消息内容：{}",messagesString);
@@ -175,7 +175,7 @@ public class ClientThread implements Runnable
 	 * 用户连接请求类型消息
 	 * @throws IOException
 	 */
-	public void connect() throws IOException{
+	public void connect() {
 		//创建个人信息
 		UserInfo user = new UserInfo(userName,userPic);
 		LinkedList<UserInfo> usertemp = new LinkedList<>();
@@ -193,7 +193,7 @@ public class ClientThread implements Runnable
 	 * 用户注销请求类型消息
 	 * @throws IOException
 	 */
-	public void disconnect() throws IOException{
+	public void disconnect() {
 		Message message = new Message();
 		message.setType(MessageType.DISCONNECT);
 		message.setFrom(userName);
@@ -238,7 +238,7 @@ public class ClientThread implements Runnable
 	 * @param content
 	 * @throws IOException
 	 */
-	public void sendMsg(String from, String to, String content) throws IOException{
+	public void sendMsg(String from, String to, String content) {
 		//创建Msg消息
 		Message message = new Message();
 		message.setType(MessageType.MSG);
@@ -253,7 +253,7 @@ public class ClientThread implements Runnable
 	 * 查询用户集类型消息
 	 * @throws IOException
 	 */
-	public void queryUserList() throws IOException{
+	public void queryUserList() {
 		Message message = new Message();
 		message.setType(MessageType.QUERY);
 		message.setTo(userName);

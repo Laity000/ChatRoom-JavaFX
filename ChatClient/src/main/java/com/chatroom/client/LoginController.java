@@ -4,6 +4,9 @@ import java.util.Random;
 import java.util.ResourceBundle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.chatroom.stage.ControlledStage;
+
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -66,17 +69,19 @@ public class LoginController extends ControlledStage implements  Initializable{
 		// TODO Auto-generated method stub
 		/* Drag and Drop */
         borderPane.setOnMousePressed(event -> {
-            xOffset = myController.getStage(myStageUIID).getX() - event.getScreenX();
-            yOffset = myController.getStage(myStageUIID).getY() - event.getScreenY();
+            xOffset = getLocalStage().getX() - event.getScreenX();
+            yOffset = getLocalStage().getY() - event.getScreenY();
             borderPane.setCursor(Cursor.CLOSED_HAND);
         });
         borderPane.setOnMouseDragged(event -> {
-            myController.getStage(myStageUIID).setX(event.getScreenX() + xOffset);
-            myController.getStage(myStageUIID).setY(event.getScreenY() + yOffset);
+        	getLocalStage().setX(event.getScreenX() + xOffset);
+        	getLocalStage().setY(event.getScreenY() + yOffset);
         });
         borderPane.setOnMouseReleased(event -> {
             borderPane.setCursor(Cursor.DEFAULT);
         });
+        //设置图标
+        setIcon("images/icon_chatroom.png");
 	}
 
 	/**
@@ -134,7 +139,7 @@ public class LoginController extends ControlledStage implements  Initializable{
 	 * @param event
 	 */
 	@FXML public void minBtnAction(ActionEvent event){
-		myController.getStage(myStageUIID).setIconified(true);
+		getLocalStage().setIconified(true);
 
 	}
 	/**
