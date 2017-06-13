@@ -215,7 +215,7 @@ public class Server {
 				//创建用户集反馈信息
 				sendUserInfoList(true);
 				//发送新用户上线通知
-				sendNotification(username +" online..");
+				sendNotification(true, username +" online..");
 			}else {
 				logger.info("用户[{}]登录失败！", username);
 				//创建连接失败反馈消息
@@ -253,7 +253,7 @@ public class Server {
 			//创建用户集反馈信息
 			sendUserInfoList(true);
 			//发送用户下线通知
-			sendNotification(userName + " offline..");
+			sendNotification(true, userName + " offline..");
 		}
 		/**
 		 * 发送在线用户信息集
@@ -265,31 +265,39 @@ public class Server {
 			if(userInfoList.isEmpty()){
 				return;
 			}
-			logger.info("发送用户集更新消息..");
 			//创建用户集反馈信息
 			Message uResult = new Message();
 			uResult.setType(MessageType.USERLIST);
 			uResult.setUserlist(userInfoList);
 			if(isAllUsers){
+				logger.info("向全体用户发送用户集更新消息..");
 				//发送给所有用户
 				sendAll(uResult, false);
 			}else {
+				logger.info("向当前用户发送用户集更新消息..");
 				//注意将该消息发给所有用户，以便动态更新用户集数据
 				send(uResult,s);
 			}
 			//logger.info("用户集更新成功！");
 		}
 		/**
-		 * 发送通知消息，用于通知全体用户
+		 * 发送通知消息，用于通知全体用户或当前用户
+		 * @param isAllUsers
 		 * @param notice
 		 * @throws IOException
 		 */
-		private void sendNotification(String notice) throws IOException {
-			logger.info("发送通知消息..");
+		private void sendNotification(boolean isAllUsers, String notice) throws IOException {
 			Message message = new Message();
 			message.setType(MessageType.NOTIFICATION);
 			message.setContent(notice);
-			sendAll(message, false);
+			if(isAllUsers){
+				logger.info("向全体用户发送通知消息..");
+
+				sendAll(message, false);
+			}else {
+				logger.info("向当前用户发送通知消息..");
+				send(message, s);
+			}
 		}
 
 		/**
@@ -306,10 +314,13 @@ public class Server {
 				sendAll(message, true);
 			}else {
 				logger.info("用户[{}]正在个人聊天，服务器单播转发..", userName);
-				send(message, socketsfromUserNames.get(toUser));
+				if(socketsfromUserNames.get(toUser) != null){
+					send(message, socketsfromUserNames.get(toUser));
+				}else {
+					logger.info("用户[{}]发送个人聊天消息失败,接受方[{}]不存在！", userName, toUser);
+					sendNotification(false, "The selected user does not exist!");
+				}
 			}
-
 		}
-
 	}
 }
