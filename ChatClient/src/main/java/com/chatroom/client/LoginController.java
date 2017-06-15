@@ -5,13 +5,19 @@ import java.util.ResourceBundle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.chatroom.communication.Comm;
+import com.chatroom.communication.CommProtocol;
+import com.chatroom.communication.TextComm;
+import com.chatroom.communication.WebsocketComm;
 import com.chatroom.stage.ControlledStage;
 
 import javafx.application.Platform;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Cursor;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -33,6 +39,11 @@ public class LoginController extends ControlledStage implements  Initializable{
 	//loginController对象
 	private static LoginController instance;
 
+	//选择通信协议
+	CommProtocol protocol = CommProtocol.WEBSOCKET_PROTOCOL;
+	//通信对象
+	Comm comm;
+
 	@FXML private BorderPane borderPane;
 	@FXML private ImageView defaultImgView;
     @FXML private ImageView randomImgView;
@@ -40,6 +51,10 @@ public class LoginController extends ControlledStage implements  Initializable{
     @FXML private TextField portTextfield;
     @FXML private TextField usernameTextfield;
     @FXML private Text resultText;
+    @FXML private ChoiceBox<String> roomIDChoiceBox;
+
+    //房间号
+    private String roomID;
 
     private double xOffset;
     private double yOffset;
@@ -82,6 +97,10 @@ public class LoginController extends ControlledStage implements  Initializable{
         });
         //设置图标
         setIcon("images/icon_chatroom.png");
+        //房间号选择
+        roomIDChoiceBox.getSelectionModel().selectedItemProperty().addListener(
+        		(ObservableValue<? extends String> ov, String old_val, String new_val)->
+        		{roomID = new_val;});
 	}
 
 	/**
@@ -127,11 +146,20 @@ public class LoginController extends ControlledStage implements  Initializable{
 		}
 		String userpic = (isDefaultPic == true) ? "Default.png" : username + ".png";
 
-
-		ClientThread clientThread = new ClientThread(hostname, port, username, userpic);
-		new Thread(clientThread).start();
-
-
+		//不同通信协议执行不同操作，思考：可以使用反射的思路
+		switch (protocol) {
+		case TEXT_PROTOCOL:
+			comm = new TextComm(hostname, port, username, userpic);
+			new Thread(comm).start();
+			break;
+		case WEBSOCKET_PROTOCOL:
+			comm = new WebsocketComm(hostname, port, username, userpic);
+			new Thread(comm).start();
+			break;
+		default:
+			logger.error("通信协议有误！");
+			break;
+		}
 	}
 
 	/**

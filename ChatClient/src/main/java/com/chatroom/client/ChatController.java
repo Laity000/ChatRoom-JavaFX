@@ -4,15 +4,12 @@ import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.LinkedList;
-import java.util.Queue;
 import java.util.ResourceBundle;
 
 import com.chatroom.bubble.BubbleSpec;
 import com.chatroom.bubble.BubbledTextFlow;
-import com.chatroom.emojis.Emoji;
-import com.chatroom.emojis.EmojiHandler;
+import com.chatroom.communication.Comm;
 import com.chatroom.emojis.EmojiDisplayer;
-
 import javafx.application.Platform;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -23,7 +20,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
@@ -58,8 +54,8 @@ public class ChatController extends ControlledStage implements Initializable{
 	//ChatController对象
 	private static ChatController instance;
 
-	//ClientThread连接线程对象
-	ClientThread clientThread;
+	//通信基类对象
+	private Comm comm;
 
 	//界面根容器
 	@FXML private BorderPane borderPane;
@@ -113,18 +109,18 @@ public class ChatController extends ControlledStage implements Initializable{
 	}
 
 	/**
-     * 得到连接线程对象。理解：
-     * ChatController类贯穿整个进程，不能通过ChatController————>ClientThread，
+     * 注册通信线程对象。理解：
+     * ChatController类贯穿整个进程，不能通过ChatController————>comm，
      * 把握不好时机容易得到空指针。
-     * 而是应该在ClientThread初始化时赋值到————>ChatController
-     * (ClientThread有ChatController对象的引用)
-     * @param clientThread
+     * 而是应该在comm初始化时赋值到————>ChatController
+     * (comm有ChatController对象的引用)
+     * @param comm
      */
-    public void setClientThread(ClientThread clientThread) {
-		this.clientThread = clientThread;
-		if (clientThread != null){
-			userName = clientThread.getUserName();
-			userPic = clientThread.getUserPic();
+    public void setConnection(Comm comm) {
+		this.comm = comm;
+		if (comm != null){
+			userName = comm.getUserName();
+			userPic = comm.getUserPic();
 			//初始化Chat界面，更新如用户头像、用户名
 			init();
 		}
@@ -158,7 +154,7 @@ public class ChatController extends ControlledStage implements Initializable{
 	@FXML public void sendBtnAction() {
 		String content = messageBoxTextArea.getText();
 		if(!content.isEmpty()){
-			clientThread.sendMsg(userName, otherUserName, content);
+			comm.sendMsg(userName, otherUserName, content);
 			messageBoxTextArea.clear();
 			addYourMessges(content);
 		}
@@ -180,8 +176,8 @@ public class ChatController extends ControlledStage implements Initializable{
 	 */
 	@FXML public void closeImgViewPressedAction() {
 		//首先需要向服务器注销用户
-		clientThread.disconnect();
-		clientThread.destroy();
+		comm.disconnect();
+		comm.destroy();
 		//退出系统
         Platform.exit();
         System.exit(0);
@@ -193,13 +189,13 @@ public class ChatController extends ControlledStage implements Initializable{
 	 */
 	@FXML public void logoutImgViewPressedAction() {
 		//首先需要向服务器注销用户
-		clientThread.disconnect();
-		clientThread.destroy();
+		comm.disconnect();
+		comm.destroy();
 		//然后清除消息对话框
 		chatPaneListView.getItems().clear();
 		//切换到登录界面
 		changeStage(Main.LoginUIID);
-		//最后才能卸载该stage，否则切换需要的资源。该思路不适合，只需要两个固定不需要卸载的界面。
+		//最后才能卸载该stage，否则切换需要的资源。update：该思路不适合，只需要两个固定不需要卸载的界面。
 		//myController.unloadStage(myStageUIID);
 
     }
@@ -263,6 +259,8 @@ public class ChatController extends ControlledStage implements Initializable{
 		//设置在线用户列表
 		Platform.runLater(() -> {
 
+			//ListView清除焦点
+			 userListView.getSelectionModel().clearSelection();
 			 //数据源
 			 ObservableList<UserInfo> users = FXCollections.observableList(userInfolist);
 			 userListView.setItems(users);
@@ -271,6 +269,7 @@ public class ChatController extends ControlledStage implements Initializable{
 
 			 //设置在线用户人数
 			 userCountLabel.setText(userCount + "");
+
 		 });
 
 		/**
@@ -279,6 +278,12 @@ public class ChatController extends ControlledStage implements Initializable{
 		userListView.getSelectionModel().selectedItemProperty().addListener(
 				(ObservableValue<? extends UserInfo> ov, UserInfo old_val,
 						UserInfo new_val) -> {
+							//solve bug
+							if(new_val == null){
+								otherUserNameLabel.setText("Welcome to ChatRoom");
+								return;
+							}
+
 							otherUserName = new_val.getUsername();
 							if(otherUserName.equals(Utils.ALL)){
 								otherUserNameLabel.setText("Chat with everyone..");

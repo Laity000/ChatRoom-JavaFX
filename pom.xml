@@ -16,6 +16,6 @@
 
   <modules>
   	<module>ChatClient</module>
-  	<module>ChatServer</module>
+  	<module>ChatServer-TXP</module>
   </modules>
 </project>
